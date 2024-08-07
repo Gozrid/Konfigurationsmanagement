@@ -1,5 +1,7 @@
 # Konfigurationsmanagement
 
+Beispiel für Konfigurationen auf dem Endsystem und mithilfe von GIT.
+
 ## Information
 
 Die Aufgaben können lokal erledigt werden oder mithilfe eines Forks des Repos.
