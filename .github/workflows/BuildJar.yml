@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - master
+      - main
 name: 🛠️ Build JAR
 run-name: ${{ github.event.head_commit.message }}
 jobs:
