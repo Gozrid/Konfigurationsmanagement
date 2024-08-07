@@ -1,0 +1,40 @@
+on: 
+  push:
+    branches:
+      - master
+name: 🛠️ Build JAR
+run-name: ${{ github.event.head_commit.message }}
+jobs:
+  Build:
+    name: Prepare and Build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4.1.1
+
+      - name: ⌛ Setup java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: ⏳ Create Jar
+        run: |
+          chmod a+x ./mvnw
+          ./mvnw clean install -Dmaven.test.skip
+
+      - name: Set outputs
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: ☁️ Upload as release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.vars.outputs.sha_short }}
+          name: ${{ github.event.head_commit.message }}
+          artifacts: "target/Konfigurationsmanagement.jar"
+          bodyFile: "README.md"
+        env:
+          NOW: $(date +'%H.%M.%S')
